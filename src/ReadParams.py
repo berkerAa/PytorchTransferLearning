@@ -17,7 +17,8 @@ class Params:
                 self.DataSetPath = self.GetVal('Dataset path')
                 self.BatchSize = int(self.GetVal('Batch Size'))
                 self.LearningRate = float(self.GetVal('Learning Rate'))
-                self.Optimizer = self.GetVal('Optimizer')                       
+                self.Optimizer = self.GetVal('Optimizer')
+                self.Monitor = int(self.GetVal('Tensorboard'))                 
         def Read(self, path):
                 with open(path) as json_file:
                         self.JsonFile = json.load(json_file)

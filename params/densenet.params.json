@@ -13,5 +13,6 @@
 "Dataset path" : "cropped_names",
 "Batch Size" : "12",
 "Learning Rate" : "0.001",
-"Optimizer" :  "SGD"
+"Optimizer" :  "SGD",
+"Tensorboard": "1"
 }

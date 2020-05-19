@@ -1,10 +1,10 @@
 from __future__ import print_function, division
 from __future__ import absolute_import
-import pandas as pd
 from packaging import version
 from six.moves import range
-import matplotlib.pyplot as plt
+import sklearn.metrics
 import seaborn as sn
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -15,23 +15,21 @@ from torchvision import models
 import time
 import os
 import copy
-from torch.utils.tensorboard import SummaryWriter
-import sklearn.metrics
 from data_load import load_dataset
 import data_split
 import ReadParams
-import socket
+import Monitor
 class Train():
         def __init__(self):
                 self.Root = os.getcwd()
                 self.Params = ReadParams.Params(os.path.join(self.Root, 'params', 'params.json'))
                 self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-                #self.writer = SummaryWriter(self.Params.LogPath)
                 self.DataSet = os.path.join(self.Root, self.Params.DataSetPath)
                 self.Splitter = data_split.Splitter(0.2, self.DataSet)
                 self.ModelLog = self.Params.ModelOutPath
                 self.BoardLog = self.Params.LogPath
-                self.is_inception = True
+                self.is_inception = False
+                self.Distribution = False
                 self.InnerModel = None
                 self.InnerLog = None
                 self.SymDataset = None
@@ -44,7 +42,7 @@ class Train():
                 self.num_ftrs = None
                 self.Criterion = None
                 self.LrSchedule = None
-                
+                self.Monitor = None
         def StartLoop(self):
                 for i in range(self.Params.TrainRep):
                         self.Iter(i)
@@ -63,17 +61,22 @@ class Train():
                 self.ModelLog = self.InnerModel.format(_trainNum)
                 self.BoardLog = self.InnerLog.format(_trainNum)
                 self.Preperations()
-                self.runTensorboard()
+                if self.Params.Monitor:
+                        self.Monitor.runTensorboard()
                 self.Train()
-                self.killTensorboard()
+                if self.Params.Monitor:
+                        self.Monitor.killTensorboard()
         def Preperations(self):
-                self.Writer = SummaryWriter(self.BoardLog)
+                if self.Params.Monitor:
+                        self.Monitor = Monitor.Monitor(self.BoardLog)  
                 print('Downloading network...')
                 self.ModelFt = eval('models.{}(pretrained={}, progress=True)'.format(self.Params.Model, True))
                 if self.Params.Model == 'inception_v3':
                         self.ModelFt.aux_logits=True
                         self.ModelFt.AuxLogits.fc = nn.Linear(768, len(self.ClassNames))
                         self.is_inception = True
+                elif self.Params.Model == 'resnext50_32x4d':
+                        self.Distribution = True
                 print('Prepearing model architecture...')
                 self.num_ftrs = self.ModelFt.fc.in_features
                 self.ModelFt.fc = nn.Linear(self.num_ftrs, len(self.ClassNames))
@@ -81,7 +84,8 @@ class Train():
                 self.OptimizerFt = self.getOptimizer()
                 self.ModelFt = self.ModelFt.to(self.device)
                 images, labels = next(iter(self.DataLoaders['train']))
-                self.Writer.add_graph(self.ModelFt, images.to(self.device))
+                if self.Params.Monitor:
+                        self.Monitor.addModelGraph(self.ModelFt, images.to(self.device))
                 self.LrSchedule = lr_scheduler.StepLR(self.OptimizerFt, step_size=self.Params.StepSize, gamma=self.Params.Gama)
                 self.toFloatPoint16()
         def Train(self):
@@ -96,8 +100,7 @@ class Train():
                                 while self.GetGpuTemp() >= 60:
                                         print('Halting training proccess for cool down')
                                         time.sleep(2*60)
-                                        print('Current Gpu Tempreture is:', self.GetGpuTemp())
-                        confusion_matrix = torch.zeros(len(self.ClassNames), len(self.ClassNames))
+                                        print('Cooled Downed Tempreture to:', self.GetGpuTemp())
                         predlist=torch.zeros(0,dtype=torch.long, device='cpu')
                         lbllist=torch.zeros(0,dtype=torch.long, device='cpu')        
                         # Each epoch has a training and validation phase
@@ -106,7 +109,8 @@ class Train():
                                         self.ModelFt.train()  # Set model to training mode
                                 else:
                                         self.ModelFt.eval()   # Set model to evaluate mode
-                                        #self.resnext50_32x4d(epoch)
+                                        if self.Distribution:
+                                                self.Monitor.resnext50_32x4d(self.ModelFt, epoch)
                                 running_loss = 0.0
                                 running_corrects = 0
                                 for inputs, labels in self.DataLoaders[phase]:
@@ -147,13 +151,8 @@ class Train():
 
                                 print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                                         phase, epoch_loss, epoch_acc))
-                                if phase == 'train':
-                                        self.Writer.add_scalar('Loss/train', epoch_loss, epoch)
-                                        self.Writer.add_scalar('Accuracy/train', epoch_acc, epoch)
-                                else:
-                                        self.Writer.add_scalar('Gpu/temp', self.GetGpuTemp(), epoch)
-                                        self.Writer.add_scalar('Loss/val', epoch_loss, epoch)
-                                        self.Writer.add_scalar('Accuracy/val', epoch_acc, epoch)
+                                if self.Params.Monitor:
+                                        self.Monitor.addScalars(epoch_acc, epoch, phase)
                                 if phase == 'val' and epoch_acc > best_acc:
                                         best_acc = epoch_acc
                                         best_model_wts = copy.deepcopy(self.ModelFt.state_dict())
@@ -161,22 +160,25 @@ class Train():
                                         con_mat = np.asarray(conf_mat)
                                         con_mat_norm = np.around(con_mat.astype('float') / con_mat.sum(axis=1)[:, np.newaxis], decimals=2)
                                         df_cm = pd.DataFrame(con_mat_norm, range(100), range(100))
-                                        plt.figure(figsize=(16,16))
                                         sn.set(font_scale=1.4) # for label size
                                         sns_plot = sn.heatmap(df_cm, annot=False)
-                                        self.Writer.add_figure("Confusion Matrix", sns_plot.figure, global_step=epoch)
-                                        
+                                        if self.Params.Monitor:
+                                                self.Monitor.addConf(sns_plot.figure, epoch)
                                         torch.save({
                                     'epoch': epoch,
                                     'model_state_dict': self.ModelFt.state_dict(),
                                     'optimizer_state_dict': self.OptimizerFt.state_dict(),
                                     'loss': epoch_loss
-                                    }, '{}/Resnext{}_acc{}.pth'.format(self.ModelLog, epoch, best_acc))
+                                    }, '{}/BestWeights.pth'.format(self.ModelLog))
                                 print()
                 time_elapsed = time.time() - since
                 print('Training complete in {:.0f}m {:.0f}s'.format(
                 time_elapsed // 60, time_elapsed % 60))
                 print('Best val Acc: {:4f}'.format(best_acc))
+                torch.save({
+                        'model_state_dict': self.ModelFt.state_dict(),
+                        'optimizer_state_dict': self.OptimizerFt.state_dict()
+                }, '{}/BestWeights_{}.pth'.format(self.ModelLog, best_acc))
         def toFloatPoint16(self):
                 self.ModelFt.half()  # convert to half precision
                 for layer in self.ModelFt.modules():
@@ -207,34 +209,7 @@ class Train():
                         pass
                 self.InnerModel = os.path.join(self.ModelLog,'{}')
                 self.InnerLog = os.path.join(self.BoardLog, '{}')
-        def getIp(self):
-                hostname = socket.gethostname()    
-                return socket.gethostbyname(hostname)
-        def runTensorboard(self):
-                os.popen('tensorboard  --logdir {} --host {} --port 6006'.format(self.BoardLog, self.getIp(), 6006))
-        def killTensorboard(self):
-                os.popen('pkill tensorboard')
-        def resnext50_32x4d(self, epoch):
-                c = 0
-                for layer in self.ModelFt.layer1:
-                        self.Writer.add_histogram("{}/conv1".format('layer1'), layer.conv1.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv3".format('layer1'), layer.conv3.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv2".format('layer1'), layer.conv2.weight, epoch)
-                for layer in self.ModelFt.layer2:
-                        self.Writer.add_histogram("{}/conv1".format('layer2'), layer.conv1.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv3".format('layer2'), layer.conv3.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv2".format('layer2'), layer.conv2.weight, epoch)
-                for layer in self.ModelFt.layer3:
-                        self.Writer.add_histogram("{}/conv1".format('layer3'), layer.conv1.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv3".format('layer3'), layer.conv3.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv2".format('layer3'), layer.conv2.weight, epoch)
-                for layer in self.ModelFt.layer4:
-                        self.Writer.add_histogram("{}/conv1".format('layer4'), layer.conv1.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv3".format('layer4'), layer.conv3.weight, epoch)
-                        self.Writer.add_histogram("{}/Conv2".format('layer4'), layer.conv2.weight, epoch)
-                
-                self.Writer.add_histogram("FC/weight",self.ModelFt.fc.weight, epoch)
-                self.Writer.add_histogram("FC/bias",self.ModelFt.fc.bias, epoch)
+        
 if __name__ == '__main__':
         obj = Train()
         obj.StartLoop()
