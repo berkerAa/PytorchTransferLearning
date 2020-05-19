@@ -23,22 +23,23 @@ pip3 install scikit-learn, seaborn, pandas
 Dataset split script was hardcoded for specific structure type as follows: <br/>
 ```
       DATASET/ 
-        .....ClassName/ 
-                      ....Image1 
-                      ....Image2 
-                      ....ImageN 
-        .....ClassName/ 
-                      ....Image1 
-                      ....Image2 
-                      ....ImageN 
-        .....ClassName/ 
-                      ....Image1 
-                      ....Image2 
-                      ....ImageN 
+              .....ClassName/ 
+                            ....Image1 
+                            ....Image2 
+                            ....ImageN 
+              .....ClassName/ 
+                            ....Image1 
+                            ....Image2 
+                            ....ImageN 
+              .....ClassName/ 
+                            ....Image1 
+                            ....Image2 
+                            ....ImageN 
 ```
 Please make sure your structure fits above constraints.                      
 #### Dataset Split Script Details
-
+Dataset Split scirpt aims in creating the training and validation folder structure for pytorch dataloader object with random 20% validation divison per classes. For avoiding unnecessary read and write operations, this script creates symlinks of generated train and validation image paths to a symlink folder named **SYMDATASET** and generates a json fomratted file for saving related image paths into two headers named **Train** and **Test** for further usage. <br/>
+***BE CAUTIOUS WHEN USING THIS SCRIPT ON WINDOWS OPERATING SYSTEMS.*** This script was originally created and tested on Ubuntu 18.04 operating system and used os.remove() builtin function for unlink pre created symlink on related SYMDATASET folder. It seems like this function may delete original paths where symlinks directs. For more information, please head to [stackoverflow](https://stackoverflow.com/questions/11700545/how-to-delete-a-symbolic-link-in-python) 
 #### Changeable paramters using params.json file
 #### Train Script Details and Changing Specific Functions Based on Running System
 # Example Usage on UECFOOD Dataset
