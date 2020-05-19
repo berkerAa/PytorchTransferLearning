@@ -1,9 +1,6 @@
 from __future__ import print_function, division
 from __future__ import absolute_import
 import pandas as pd
-from datetime import datetime
-import io
-import itertools
 from packaging import version
 from six.moves import range
 import matplotlib.pyplot as plt
@@ -14,18 +11,13 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 import numpy as np
 import torchvision
-from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
+from torchvision import models
 import time
 import os
 import copy
-import tensorflow as tf
 from torch.utils.tensorboard import SummaryWriter
 import sklearn.metrics
-from PIL import Image
-from conf_matrix import conf_mat
 from data_load import load_dataset
-import argparse
 import data_split
 import ReadParams
 import socket
