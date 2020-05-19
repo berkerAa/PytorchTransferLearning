@@ -13,11 +13,11 @@ a Transfer Learning project for simplifying training process using **pytorch** f
 - [Acknowledgments](#acknowledgments)
 # Getting Started
 These instructions will get you a copy of the project up and running on your local machine for train and testing purposes. See [Example Usage](#example-usage-on-uecfood-dataset) for notes on how to deploy the project and run a demo on UECFOOD Dataset.
-## Installing Necessary Libraries
-## Dataset Structure
-## Dataset Split Script Details
-## Changeable paramters using params.json file
-## Train Script Details and Changing Specific Functions Based on Running System
+#### Installing Necessary Libraries
+#### Dataset Structure
+#### Dataset Split Script Details
+#### Changeable paramters using params.json file
+#### Train Script Details and Changing Specific Functions Based on Running System
 # Example Usage on UECFOOD Dataset
 # Authors
 # License
