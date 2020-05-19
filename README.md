@@ -20,7 +20,8 @@ If you want you monitor your real time progress using Tensorboard along with Con
 pip3 install scikit-learn, seaborn, pandas
 ```
 #### Dataset Structure
-Dataset split script was hardcoded for specific structure type as follows:
+Dataset split script was hardcoded for specific structure type as follows: <br/>
+```
       **DATASET/** <br/>
         .....**ClassName/** <br/>
                       ....**Image1** <br/>
@@ -34,6 +35,7 @@ Dataset split script was hardcoded for specific structure type as follows:
                       ....**Image1** <br/>
                       ....**Image2** <br/>
                       ....**ImageN** <br/>
+```
 Please make sure your structure fits above constraints.                      
 #### Dataset Split Script Details
 
