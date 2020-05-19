@@ -11,7 +11,6 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 import numpy as np
 import torchvision
-from torchvision import models
 import time
 import os
 import copy
@@ -19,6 +18,7 @@ from data_load import load_dataset
 import data_split
 import ReadParams
 import Monitor
+import CreateModel
 class Train():
         def __init__(self):
                 self.Root = os.getcwd()
@@ -67,18 +67,16 @@ class Train():
                         self.Monitor.killTensorboard()
         def Preperations(self):
                 if self.Params.Monitor:
-                        self.Monitor = Monitor.Monitor(self.BoardLog)  
-                print('Downloading network...')
-                self.ModelFt = eval('models.{}(pretrained={}, progress=True)'.format(self.Params.Model, True))
+                        self.Monitor = Monitor.Monitor(self.BoardLog)
+                PlaceHolder = CreateModel.CreateModel(self.Params, len(self.ClassNames))
+                self.ModelFt = PlaceHolder.PretrainedModel
+                del PlaceHolder
                 if self.Params.Model == 'inception_v3':
-                        self.ModelFt.aux_logits=True
-                        self.ModelFt.AuxLogits.fc = nn.Linear(768, len(self.ClassNames))
                         self.is_inception = True
                 elif self.Params.Model == 'resnext50_32x4d':
                         self.Distribution = True
                 print('Prepearing model architecture...')
-                self.num_ftrs = self.ModelFt.fc.in_features
-                self.ModelFt.fc = nn.Linear(self.num_ftrs, len(self.ClassNames))
+                
                 self.Criterion = nn.CrossEntropyLoss()
                 self.OptimizerFt = self.getOptimizer()
                 self.ModelFt = self.ModelFt.to(self.device)
