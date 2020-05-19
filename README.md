@@ -41,9 +41,13 @@ Please make sure your structure fits above constraints.
 Dataset Split scirpt aims in creating the training and validation folder structure for pytorch dataloader object with random 20% validation divison per classes. For avoiding unnecessary read and write operations, this script creates symlinks of generated train and validation image paths to a symlink folder named **SYMDATASET** and generates a json fomratted file for saving related image paths into two headers named **Train** and **Test** for further usage. <br/>
 ***BE CAUTIOUS WHEN USING THIS SCRIPT ON WINDOWS OPERATING SYSTEMS.*** This script was originally created and tested on Ubuntu 18.04 operating system and used os.remove() builtin function for unlink pre created symlink on related SYMDATASET folder. It seems like this function may delete original paths where symlinks directs. For more information, please head to [stackoverflow](https://stackoverflow.com/questions/11700545/how-to-delete-a-symbolic-link-in-python) 
 ## Changeable paramters using params.json file
-**Log Path**: Desired path for save Tensorboard log files, default: runs/Inception_Fp16_320
-**Create Structure**: Checks if [CreateStructure](https://github.com/berkerAa/PytorchTransferLearning/blob/4181536e397656d79d14e8e989f5b451a676aa20/src/data_split.py#L18-L30) function will run.Change to 1 for first use, default: 0
-
+**Log Path**: Desired path for save Tensorboard log files, default: runs/resnext50_32x4d <br/>
+**Create Structure**: Checks if [CreateStructure](https://github.com/berkerAa/PytorchTransferLearning/blob/4181536e397656d79d14e8e989f5b451a676aa20/src/data_split.py#L18-L30) function will run.Change to 1 for first use, default: 0 <br/>
+**Pretrained Model**: Model name from **[torchvision.models](https://pytorch.org/docs/stable/torchvision/models.html)** for pretrained model weights, default: resnext50_32x4d <br/>
+**Model output path**: Desired path for save Model outputs, default: Models/resnext50_32x4d <br/>
+**Train repitation**: Int value for how many trains be done with same parameters and different splits before kill process, default: 5 <br/>
+**Dataset path**: Dataset path that fits specifications. For more details, please head to [Dataset Structure](#dataset-structure). Default: cropped_names <br/>
+For more parameter settings and example params.json files, please head to [params](https://github.com/berkerAa/PytorchTransferLearning/tree/master/params). Before run Train.py script, be sure that desired parameters file is named like params.json. For example if you want to train your network according to [this](https://github.com/berkerAa/PytorchTransferLearning/blob/master/params/densenet.params.json) parameters, rename file as params.json then run the Train script.
 ## Train Script Details and Changing Specific Functions Based on Running System
 # Example Usage on UECFOOD Dataset
 # Authors
