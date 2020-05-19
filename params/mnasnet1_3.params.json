@@ -1,0 +1,17 @@
+ {
+"Log path": "runs/mnasnet1_3_Fp16_320",
+"Create Structure": "0",
+"Pretrained Model": "mnasnet1_3",
+"Model output path": "Models/mnasnet1_3_Fp16_320",
+"Train repitation": "5",
+"Epochs" : "40",
+"Step size" : "7",
+"Gama" : "0.6",
+"Momentum" : "0.95",
+"Image Size" : "320",
+"Cropped Image Size": "320",
+"Dataset path" : "cropped_names",
+"Batch Size" : "12",
+"Learning Rate" : "0.001",
+"Optimizer" :  "SGD"
+}

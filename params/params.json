@@ -1,0 +1,17 @@
+ {
+"Log path": "runs/Inception_Fp16_320",
+"Create Structure": "0",
+"Pretrained Model": "inception_v3",
+"Model output path": "Models/Inception_Fp16_320",
+"Train repitation": "5",
+"Epochs" : "40",
+"Step size" : "7",
+"Gama" : "0.6",
+"Momentum" : "0.95",
+"Image Size" : "299",
+"Cropped Image Size": "299",
+"Dataset path" : "cropped_names",
+"Batch Size" : "12",
+"Learning Rate" : "0.001",
+"Optimizer" :  "SGD"
+}
