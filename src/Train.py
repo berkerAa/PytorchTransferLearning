@@ -48,12 +48,11 @@ class Train():
                         self.Iter(i)
                         self.ModelFt = None
                         self.CoolDown()
-                        self.Writer.close()
         def Iter(self, _trainNum):
+                self.CreateStruct()
                 self.Splitter.Run()
                 self.SymDataset = self.Splitter.outDataset
                 self.DataLoaders, self.ClassNames, self.DatasetSize = load_dataset(self.SymDataset, self.Params.ImgSize, self.Params.CropSize, self.Params.BatchSize)
-                self.CreateStruct()
                 try:
                     os.mkdir(self.InnerModel.format(_trainNum))
                 except:
