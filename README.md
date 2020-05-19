@@ -16,10 +16,10 @@ These instructions will get you a copy of the project up and running on your loc
 #### Installing Necessary Libraries
 This project mostly depended to pytorch so to install, please head to **[pytorch official website](https://pytorch.org/)** for install latest stable release.
 If you want you monitor your real time progress using Tensorboard along with Confusion Matrix, There is few packages nedded to be install. **sklearn** library for creating confusion matrix, **pandas** library for creating temporary data frame object for creating heatmap and **seaborn** library for creating confusion matrix heatmap. For installation, please run:
-'''
+```
 pip3 install scikit-learn, seaborn, pandas
 
-'''
+```
 #### Dataset Structure
 #### Dataset Split Script Details
 #### Changeable paramters using params.json file
