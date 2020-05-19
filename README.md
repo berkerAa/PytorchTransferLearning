@@ -22,19 +22,19 @@ pip3 install scikit-learn, seaborn, pandas
 #### Dataset Structure
 Dataset split script was hardcoded for specific structure type as follows: <br/>
 ```
-      DATASET/ <br/>
-        .....ClassName/ <br/>
-                      ....Image1 <br/>
-                      ....Image2 <br/>
-                      ....ImageN <br/>
-        .....ClassName/ <br/>
-                      ....Image1 <br/>
-                      ....Image2 <br/>
-                      ....ImageN <br/>
-        .....ClassName/ <br/>
-                      ....Image1 <br/>
-                      ....Image2 <br/>
-                      ....ImageN <br/>
+      DATASET/ 
+        .....ClassName/ 
+                      ....Image1 
+                      ....Image2 
+                      ....ImageN 
+        .....ClassName/ 
+                      ....Image1 
+                      ....Image2 
+                      ....ImageN 
+        .....ClassName/ 
+                      ....Image1 
+                      ....Image2 
+                      ....ImageN 
 ```
 Please make sure your structure fits above constraints.                      
 #### Dataset Split Script Details
