@@ -5,7 +5,7 @@ class CreateModel:
         print('Downloading network...')
         self.SoftMax = SoftMax
         self.PretrainedModel = eval('models.{}(pretrained={}, progress=True)'.format(Params.Model, True))
-        eval('{}()'.format(Params.Model))
+        eval('self.{}()'.format(Params.Model))
     def resnet18(self):
         self.num_ftrs = self.PretrainedModel.fc.in_features
         self.PretrainedModel.fc = nn.Linear(self.num_ftrs, self.SoftMax)
@@ -16,10 +16,9 @@ class CreateModel:
         self.num_ftrs = self.PretrainedModel.fc.in_features
         self.PretrainedModel.classifier[6] = nn.Linear(self.num_ftrs, self.SoftMax)
     def squeezenet1_1(self):
-        self.num_ftrs = self.PretrainedModel.fc.in_features
-        self.PretrainedModel.classifier[1] = nn.Conv2d(self.num_ftrs, self.SoftMax, kernel_size=(1,1), stride=(1,1))
+        self.PretrainedModel.classifier[1] = nn.Conv2d(512, self.SoftMax, kernel_size=(1,1), stride=(1,1))
     def densenet121(self):
-        self.num_ftrs = self.PretrainedModel.fc.in_features
+        self.num_ftrs = self.PretrainedModel.classifier.in_features
         self.PretrainedModel.classifier = nn.Linear(self.num_ftrs, self.SoftMax)
     def inception_v3(self):
         self.PretrainedModel.aux_logits=True
