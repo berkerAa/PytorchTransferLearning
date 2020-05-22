@@ -5,7 +5,7 @@ a Transfer Learning project for simplifying training process using **pytorch** f
   - [Installing Necessary Libraries](#installing-necessary-libraries)
   - [Dataset Structure](#dataset-structure)
   - [Dataset Split Script Details](#dataset-split-script-details)
-  - [Changeable paramters using params.json file](#changeable-parameters-using-params.json-file)
+  - [Changeable paramters using params.json file](#changeable-parameters-using-params-file)
   - [Train Script Details and Changing Specific Functions Based on Running System](#train-script-details-and-changing-specific-functions-based-on-running-system)
 - [Example Usage on Fake Face Classification Task](#example-usage-on-fake-face-classification-task)
 - [Authors](#authors)
@@ -40,7 +40,7 @@ Please make sure your structure fits above constraints.
 ## Dataset Split Script Details
 Dataset Split scirpt aims in creating the training and validation folder structure for pytorch dataloader object with random 20% validation divison per classes. For avoiding unnecessary read and write operations, this script creates symlinks of generated train and validation image paths to a symlink folder named **SYMDATASET** and generates a json fomratted file for saving related image paths into two headers named **Train** and **Test** for further usage. <br/>
 ***BE CAUTIOUS WHEN USING THIS SCRIPT ON WINDOWS OPERATING SYSTEMS.*** This script was originally created and tested on Ubuntu 18.04 operating system and used os.remove() builtin function for unlink pre created symlink on related SYMDATASET folder. It seems like this function may delete original paths where symlinks directs. For more information, please head to [stackoverflow](https://stackoverflow.com/questions/11700545/how-to-delete-a-symbolic-link-in-python) 
-## Changeable parameters using params.json file
+## Changeable parameters using params file
 **Log Path**: Desired path for save Tensorboard log files, default: runs/Test <br/>
 **Create Structure**: Checks if [CreateStructure](https://github.com/berkerAa/PytorchTransferLearning/blob/4181536e397656d79d14e8e989f5b451a676aa20/src/data_split.py#L18-L30) function will run.Change to 1 for first use, default: 0 <br/>
 **Pretrained Model**: Model name from **[torchvision.models](https://pytorch.org/docs/stable/torchvision/models.html)** for pretrained model weights, default: resnext50_32x4d <br/>
@@ -60,7 +60,7 @@ if you dont have unzip installed in your system, it can be isntalled via:
 ```
 sudo apt-get install unzip
 ```
-After this operation is finished, we need to edit the params/params.json file according to our specifications. For more information, you can visit [Changable parameters section](#changeable-parameters-using-params.json-file). We will change [Create Structure, Pretrained Model](https://github.com/berkerAa/PytorchTransferLearning/blob/002970e18c670d0cfba09eb9b89bb160e56fdeb0/params/params.json#L3-L4) and [Dataset path](https://github.com/berkerAa/PytorchTransferLearning/blob/002970e18c670d0cfba09eb9b89bb160e56fdeb0/params/params.json#L13)
+After this operation is finished, we need to edit the params/params.json file according to our specifications. For more information, you can visit [Changable parameters section](#changeable-parameters-using-params-file). We will change [Create Structure, Pretrained Model](https://github.com/berkerAa/PytorchTransferLearning/blob/002970e18c670d0cfba09eb9b89bb160e56fdeb0/params/params.json#L3-L4) and [Dataset path](https://github.com/berkerAa/PytorchTransferLearning/blob/002970e18c670d0cfba09eb9b89bb160e56fdeb0/params/params.json#L13)
 parameters. We need to change Create Structure parameter to **1** because this is first time we runing this script on this dataset and therefor we need to create Symlink data structer for train and validation script. More information can be obtained from [Dataset Split Script Details Section](#dataset-split-script-dtetails). Cause of our dataset size, we will use resnet-18 model with imagenet pretrained weights. Therefor we need to change Pretrained Model parameter to **resnet18**. Finally we need to change our Dataset path parameter to the full path of our unzipped dataset file. After every step is done, your params.json file should be like that:
 ```
 {
