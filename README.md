@@ -5,8 +5,8 @@ a Transfer Learning project for simplifying training process using **pytorch** f
   - [Installing Necessary Libraries](#installing-necessary-libraries)
   - [Dataset Structure](#dataset-structure)
   - [Dataset Split Script Details](#dataset-split-script-details)
-  - [Changeable paramters using params.json file](#changeable-paramters-using-params.json-file)
-  - [Train Script Details and Changing Specific Functions Based on Running System](#train-script-details)
+  - [Changeable paramters using params.json file](#changeable-parameters-using-params.json-file)
+  - [Train Script Details and Changing Specific Functions Based on Running System](#train-script-details-and-changing-specific-functions-based-on-running-system)
 - [Example Usage on UECFOOD Dataset](#example-usage-on-uecfood-dataset)
 - [Authors](#authors)
 - [License](#license)
@@ -40,7 +40,7 @@ Please make sure your structure fits above constraints.
 ## Dataset Split Script Details
 Dataset Split scirpt aims in creating the training and validation folder structure for pytorch dataloader object with random 20% validation divison per classes. For avoiding unnecessary read and write operations, this script creates symlinks of generated train and validation image paths to a symlink folder named **SYMDATASET** and generates a json fomratted file for saving related image paths into two headers named **Train** and **Test** for further usage. <br/>
 ***BE CAUTIOUS WHEN USING THIS SCRIPT ON WINDOWS OPERATING SYSTEMS.*** This script was originally created and tested on Ubuntu 18.04 operating system and used os.remove() builtin function for unlink pre created symlink on related SYMDATASET folder. It seems like this function may delete original paths where symlinks directs. For more information, please head to [stackoverflow](https://stackoverflow.com/questions/11700545/how-to-delete-a-symbolic-link-in-python) 
-## Changeable paramters using params.json file
+## Changeable parameters using params.json file
 **Log Path**: Desired path for save Tensorboard log files, default: runs/resnext50_32x4d <br/>
 **Create Structure**: Checks if [CreateStructure](https://github.com/berkerAa/PytorchTransferLearning/blob/4181536e397656d79d14e8e989f5b451a676aa20/src/data_split.py#L18-L30) function will run.Change to 1 for first use, default: 0 <br/>
 **Pretrained Model**: Model name from **[torchvision.models](https://pytorch.org/docs/stable/torchvision/models.html)** for pretrained model weights, default: resnext50_32x4d <br/>
@@ -49,6 +49,8 @@ Dataset Split scirpt aims in creating the training and validation folder structu
 **Dataset path**: Dataset path that fits specifications. For more details, please head to [Dataset Structure](#dataset-structure). Default: cropped_names <br/>
 For more parameter settings and example params.json files, please head to [params](https://github.com/berkerAa/PytorchTransferLearning/tree/master/params). Before run Train.py script, be sure that desired parameters file is named like params.json. For example if you want to train your network according to [this](https://github.com/berkerAa/PytorchTransferLearning/blob/master/params/densenet.params.json) parameters, rename file as params.json then run the Train script.
 ## Train Script Details and Changing Specific Functions Based on Running System
+Train.py script uses src/Monitor.py, src/CreateModel.py, src/ReadParams.py scripts backhand according to given parameters. Please be sure that these files present for avoid problems. There is few things needed to be editted before start according to your local system. First of all, this script originally starts training process with mixed precision concept. If you want to disable mix precision feature please comment this line: [line87](https://github.com/berkerAa/PytorchTransferLearning/blob/79102c77dfe3a26087b41011c8f0f9ca7830de90/src/Train.py#L87) and delete .half() functions call on this line: [line114](https://github.com/berkerAa/PytorchTransferLearning/blob/79102c77dfe3a26087b41011c8f0f9ca7830de90/src/Train.py#L114). For more information about Mixed precision concept you can visit this [link](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html). <br/>
+We were added a cooldown condition that checks and acts according GPU Tempreture for avoid high hardware tempreture during training process. This may cause a slightly slow training process dependet on used systems. For disable this condition check, you can comment [lines](https://github.com/berkerAa/PytorchTransferLearning/blob/79102c77dfe3a26087b41011c8f0f9ca7830de90/src/Train.py#L96-L100).  
 # Example Usage on UECFOOD Dataset
 # Authors
 # License
