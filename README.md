@@ -65,12 +65,12 @@ parameters. We need to change Create Structure parameter to **1** because this i
 ```
 {
 "Log path": "runs/Test",
-"Create Structure": "0",
+"Create Structure": "1",
 "Pretrained Model": "resnet18",
 "Model output path": "Models/Test",
 "Train repitation": "1",
-"Epochs" : "5",
-"Step size" : "2",
+"Epochs" : "10",
+"Step size" : "4",
 "Gama" : "0.6",
 "Momentum" : "0.95",
 "Image Size" : "320",
@@ -87,7 +87,11 @@ Also if you dont want to use Tensorboard feature, you can cange [Tensorboard](ht
 cd PytorchTransferLearning
 python3 src/Train.py
 ```
+You can observe your training process via unix terminal or from tensorboard with <http://YourIp:6006> address.
 # Authors
+**Berker ARSLAN** - [berkerAa](https://github.com/berkerAa) <br />
+**Sefer MEMIS** - [sefermemis](https://github.com/sefermemis)
 # License
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/berkerAa/PytorchTransferLearning/blob/master/LICENSE) file for details
 # Acknowledgments
 
