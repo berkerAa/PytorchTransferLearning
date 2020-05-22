@@ -12,7 +12,7 @@ a Transfer Learning project for simplifying training process using **pytorch** f
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 # Getting Started
-These instructions will get you a copy of the project up and running on your local machine for train and testing purposes. See [Example Usage](#example-usage-on-uecfood-dataset) for notes on how to deploy the project and run a demo on UECFOOD Dataset. Before get started, please be sure that Cuda and Nvidia drivers correctly installed and added to bash for avoid further runtime errors.
+These instructions will get you a copy of the project up and running on your local machine for train and testing purposes. See [Example Usage](#example-usage-on-uecfood-dataset) for notes on how to deploy the project and run a demo on Fake Image classification task. Before get started, please be sure that Cuda and Nvidia drivers correctly installed and added to bash for avoid further runtime errors.
 ## Installing Necessary Libraries
 This project mostly depended on pytorch so for installation, please head to **[pytorch official website](https://pytorch.org/)** for install latest stable release. <br/>
 If you want you monitor your real time progress using Tensorboard along with Confusion Matrix, There is few packages nedded to be installed. **sklearn** library for creating confusion matrix, **pandas** library for creating temporary data frame object in order to creating heatmap and **seaborn** library for creating confusion matrix heatmap. For installation, please run:
@@ -56,7 +56,7 @@ Before starting, please make sure you [install](#installing-necessary-libraries)
 ```
 unzip <FilePath> -d <DesiredOutputPath>
 ```
-if you dont have unzip installed in your system, it can be isntalled via:
+if you dont have unzip installed in your system, it can be installed via:
 ```
 sudo apt-get install unzip
 ```
@@ -94,6 +94,6 @@ You can observe your training process via unix terminal or from tensorboard with
 # License
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/berkerAa/PytorchTransferLearning/blob/master/LICENSE) file for details
 # Acknowledgments
-https://mc.ai/fake-face-image-classification/
+https://mc.ai/fake-face-image-classification/ <br />
 https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
 
