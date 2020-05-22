@@ -7,7 +7,7 @@ a Transfer Learning project for simplifying training process using **pytorch** f
   - [Dataset Split Script Details](#dataset-split-script-details)
   - [Changeable paramters using params.json file](#changeable-parameters-using-params.json-file)
   - [Train Script Details and Changing Specific Functions Based on Running System](#train-script-details-and-changing-specific-functions-based-on-running-system)
-- [Example Usage on UECFOOD Dataset](#example-usage-on-uecfood-dataset)
+- [Example Usage on Fake Face Classification Task](#example-usage-on-fake-face-classification-task)
 - [Authors](#authors)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
@@ -51,7 +51,8 @@ For more parameter settings and example params.json files, please head to [param
 ## Train Script Details and Changing Specific Functions Based on Running System
 Train.py script uses src/Monitor.py, src/CreateModel.py, src/ReadParams.py scripts backhand according to given parameters. Please be sure that these files present for avoid problems. There is few things needed to be editted before start according to your local system. First of all, this script originally starts training process with mixed precision concept. If you want to disable mix precision feature please comment this line: [line87](https://github.com/berkerAa/PytorchTransferLearning/blob/79102c77dfe3a26087b41011c8f0f9ca7830de90/src/Train.py#L87) and delete .half() functions call on this line: [line114](https://github.com/berkerAa/PytorchTransferLearning/blob/79102c77dfe3a26087b41011c8f0f9ca7830de90/src/Train.py#L114). For more information about Mixed precision concept you can visit this [link](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html). <br/>
 We were added a cooldown condition that checks and acts according GPU Tempreture for avoid high hardware tempreture during training process. This may cause a slightly slow training process dependet on used systems. For disable this condition check, you can comment [lines](https://github.com/berkerAa/PytorchTransferLearning/blob/79102c77dfe3a26087b41011c8f0f9ca7830de90/src/Train.py#L96-L100).  
-# Example Usage on UECFOOD Dataset
+# Example Usage on Fake Face Classification Task
+Before starting, please make sure you [install](#installing-necessary-libraries) mandatory libraries, changed realted parts on [Train](#train-script-details-and-changing-specific-functions-based-on-running-system) script. **This example designed for Ubuntu operating systems, folowing unix commands may vary according to operating system. For Windows users, please head to [Dataset split section](#dataset-split-script-details) for avoid file loss.**  
 # Authors
 # License
 # Acknowledgments
