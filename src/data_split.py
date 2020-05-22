@@ -26,8 +26,9 @@ class Splitter:
                 os.mkdir(self.Train)
                 os.mkdir(self.Test)
                 for i in os.listdir(self.DataSet):
-                        os.mkdir(os.path.join(self.Train, i))
-                        os.mkdir(os.path.join(self.Test, i))
+                        if os.path.isdir(os.path.join(self.DataSet, i)): 
+                            os.mkdir(os.path.join(self.Train, i))
+                            os.mkdir(os.path.join(self.Test, i))
         def CheckOut(self):
         #Checks output folders if there is any pre defined symlink images inside
                 TrainCount = len(os.listdir(os.path.join(self.Train, os.listdir(self.Train)[0])))
@@ -45,6 +46,7 @@ class Splitter:
         #Fills Place Hodler object for further usage, splites every class with given DivisionParam
                 train, test = [], []
                 for i in os.listdir(self.DataSet):
+                    if os.path.isdir(os.path.join(self.DataSet, i)): 
                         X = os.listdir(os.path.join(self.DataSet, i))
                         y = np.zeros(len(X))
                         X_train, X_test, _, _ = model_selection.train_test_split(X, y,test_size=self.DivisionParam)

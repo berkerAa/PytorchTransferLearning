@@ -156,7 +156,7 @@ class Train():
                                         conf_mat=sklearn.metrics.confusion_matrix(lbllist.numpy(), predlist.numpy())
                                         con_mat = np.asarray(conf_mat)
                                         con_mat_norm = np.around(con_mat.astype('float') / con_mat.sum(axis=1)[:, np.newaxis], decimals=2)
-                                        df_cm = pd.DataFrame(con_mat_norm, range(100), range(100))
+                                        df_cm = pd.DataFrame(con_mat_norm, range(len(self.ClassNames)), range(len(self.ClassNames)))
                                         sn.set(font_scale=1.4) # for label size
                                         sns_plot = sn.heatmap(df_cm, annot=False)
                                         if self.Params.Monitor:
