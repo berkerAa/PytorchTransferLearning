@@ -199,6 +199,7 @@ class Train():
         def CreateStruct(self):
                 if self.Params.CreateStructure :
                         self.Splitter.CreateStructure()
+                        self.Params.CreateStructure = 0
                 try:
                         os.mkdir(self.ModelLog)
                         os.mkdir(self.BoardLog)

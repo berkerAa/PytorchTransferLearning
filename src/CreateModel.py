@@ -5,7 +5,10 @@ class CreateModel:
         print('Downloading network...')
         self.SoftMax = SoftMax
         self.PretrainedModel = eval('models.{}(pretrained={}, progress=True)'.format(Params.Model, True))
-        eval('self.{}()'.format(Params.Model))
+        try:
+            eval('self.{}()'.format(Params.Model))
+        except:
+            self.resnet18()
     def resnet18(self):
         self.num_ftrs = self.PretrainedModel.fc.in_features
         self.PretrainedModel.fc = nn.Linear(self.num_ftrs, self.SoftMax)
